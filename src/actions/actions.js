@@ -1,6 +1,4 @@
-
-import axios from "axios";
-
+import ContactsApi from "../api/contactsApi"
 let nextToDoId = 0;
 
 var addContact = function (contact) {
@@ -40,55 +38,26 @@ var saveEditContact = function (contact) {
 
 function getContactsAPI() {
     return function (dispatch) {
-        return axios({
-            url: "https://api.mlab.com/api/1/databases/contact-list/collections/contacts?apiKey=nb3xCyPipDiF6gw1aLjOkatZdoet8rep",
-            timeout: 20000,
-            method: 'get',
-            responseType: 'json'
-        })
-            .then(response =>dispatch(getContacts(response.data)))
+        ContactsApi.getContactsAPI().then(response =>dispatch(getContacts(response.data)))
     }
 }
 
 function postContactAPI(contact) {
     return function (dispatch) {
-        return axios({
-            url: "https://api.mlab.com/api/1/databases/contact-list/collections/contacts?apiKey=nb3xCyPipDiF6gw1aLjOkatZdoet8rep",
-            timeout: 20000,
-            method: 'post',
-            responseType: 'json',
-            data: contact,
-            headers: {'Content-Type': 'application/json' }
-        })
-            .then(response =>dispatch(addContact(response.data)))
+        ContactsApi.postContactAPI(contact).then(response =>dispatch(addContact(response.data)))
     }
 }
 
 function updateContactAPI(contact) {
     return function (dispatch) {
-        return axios({
-            url: "https://api.mlab.com/api/1/databases/contact-list/collections/contacts/" + contact.id + "?apiKey=nb3xCyPipDiF6gw1aLjOkatZdoet8rep",
-            timeout: 20000,
-            method: 'put',
-            responseType: 'json',
-            data: {"$set" : {"name" : contact.name, "phone" : contact.phone, "email": contact.email}},
-            headers: {'Content-Type': 'application/json' }
-        })
-            .then(response =>dispatch(saveEditContact(response.data)))
+        ContactsApi.updateContactAPI(contact).then(response =>dispatch(saveEditContact(response.data)))
     }
 }
 
 
 function deleteContactAPI(id) {
     return function (dispatch) {
-        return axios({
-            url: "https://api.mlab.com/api/1/databases/contact-list/collections/contacts/" + id + "?apiKey=nb3xCyPipDiF6gw1aLjOkatZdoet8rep",
-            timeout: 20000,
-            method: 'delete',
-            responseType: 'json',
-            headers: {'Content-Type': 'application/json' }
-        })
-            .then(response =>dispatch(removeContact(id)))
+        ContactsApi.deleteContactAPI(id).then(response =>dispatch(removeContact(id)))
     }
 }
 
